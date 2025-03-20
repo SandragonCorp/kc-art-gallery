@@ -19,6 +19,7 @@ model User {
   createdAt             DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
   image                String?
+  role UserRole @default(AUDIENCE)
   comments             Comment[]
   following            Follows[]      @relation("follower")
   followers            Follows[]      @relation("following")
@@ -28,9 +29,15 @@ model User {
   posts                Post[]
 }
 
+enum UserRole {
+  ADMIN
+  AUDIENCE
+}
+
 model Post {
   id            String         @id @default(uuid())
   authorId      String
+  title String?
   content       String?
   image         String?
   updatedAt     DateTime       @updatedAt

@@ -66,6 +66,17 @@ export async function getDbUserId() {
   return user.id
 }
 
+export async function getUserRoleByClerkId() {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return null;
+
+  const user = await getUserByClerkId(clerkId);
+
+  if (!user) throw new Error("User not found");
+
+  return user.role
+}
+
 export async function getRandomUsers() {
   try {
     const userId = await getDbUserId();

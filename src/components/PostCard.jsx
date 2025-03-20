@@ -75,26 +75,25 @@ function PostCard({ post, dbUserId }) {
       <CardContent className="p-4 sm:p-6">
         <div className="space-y-4">
           <div className="flex space-x-3 sm:space-x-4">
-            <Link href={`/profile/${post.author.username}`}>
+            {/* <Link href={`/profile/${post.author.username}`}>
               <Avatar className="size-8 sm:w-10 sm:h-10">
                 <AvatarImage src={post.author.image ?? "/avatar.png"} />
               </Avatar>
-            </Link>
+            </Link> */}
 
             {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
-                  <Link
+                  {/* <Link
                     href={`/profile/${post.author.username}`}
                     className="font-semibold truncate"
                   >
                     {post.author.name}
-                  </Link>
+                  </Link> */}
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Link href={`/profile/${post.author.username}`}>@{post.author.username}</Link>
-                    <span>·</span>
-                    <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
+                    {/* <Link href={`/profile/${post.author.username}`}>@{post.author.username}</Link> */}
+                    {/* <span>·</span> */}
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
@@ -102,7 +101,20 @@ function PostCard({ post, dbUserId }) {
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
                 )}
               </div>
-              <p className="mt-2 text-sm text-foreground break-words">{post.content}</p>
+              <div className='flex flex-col items-center justify-center'>
+                {post.title ? (
+                  <p className="mt-2 text-sm text-foreground break-words text-center">{post.title}</p>
+                ) : (
+                  <p className="mt-2 text-sm text-foreground break-words italic text-center">No Title</p>
+                )}
+              </div>
+              <div className='flex flex-col items-center justify-center'>
+                {post.title ? (
+                  <p className="mt-2 text-sm text-foreground break-words text-center">{post.content}</p>
+                ) : (
+                  <p className="mt-2 text-sm text-foreground break-words italic text-center">No Description</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -114,42 +126,45 @@ function PostCard({ post, dbUserId }) {
           )}
 
           {/* LIKE & COMMENT BUTTONS */}
-          <div className="flex items-center pt-2 space-x-4">
-            {user ? (
+          <div className="flex items-center justify-between pt-2 space-x-4">
+            <div>
+              {user ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`text-muted-foreground gap-2 ${hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500"
+                    }`}
+                  onClick={handleLike}
+                >
+                  {hasLiked ? (
+                    <HeartIcon className="size-5 fill-current" />
+                  ) : (
+                    <HeartIcon className="size-5" />
+                  )}
+                  <span>{optimisticLikes}</span>
+                </Button>
+              ) : (
+                <SignInButton mode="modal">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground gap-2">
+                    <HeartIcon className="size-5" />
+                    <span>{optimisticLikes}</span>
+                  </Button>
+                </SignInButton>
+              )}
+
               <Button
                 variant="ghost"
                 size="sm"
-                className={`text-muted-foreground gap-2 ${hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500"
-                  }`}
-                onClick={handleLike}
+                className="text-muted-foreground gap-2 hover:text-blue-500"
+                onClick={() => setShowComments(!showComments)}
               >
-                {hasLiked ? (
-                  <HeartIcon className="size-5 fill-current" />
-                ) : (
-                  <HeartIcon className="size-5" />
-                )}
-                <span>{optimisticLikes}</span>
+                <MessageCircleIcon
+                  className={`size-5 ${showComments ? "fill-blue-500 text-blue-500" : ""}`}
+                />
+                <span>{post.comments.length}</span>
               </Button>
-            ) : (
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm" className="text-muted-foreground gap-2">
-                  <HeartIcon className="size-5" />
-                  <span>{optimisticLikes}</span>
-                </Button>
-              </SignInButton>
-            )}
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground gap-2 hover:text-blue-500"
-              onClick={() => setShowComments(!showComments)}
-            >
-              <MessageCircleIcon
-                className={`size-5 ${showComments ? "fill-blue-500 text-blue-500" : ""}`}
-              />
-              <span>{post.comments.length}</span>
-            </Button>
+            </div>
+            <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
           </div>
 
           {/* COMMENTS SECTION */}
