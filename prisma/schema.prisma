@@ -39,7 +39,7 @@ model Post {
   authorId      String
   title String?
   content       String?
-  image         String?
+  image         String
   updatedAt     DateTime       @updatedAt
   createdAt     DateTime       @default(now())
   comments      Comment[]

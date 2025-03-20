@@ -13,19 +13,21 @@ import ImageUpload from './ImageUpload';
 
 function CreatePost() {
   const { user } = useUser()
+  const [title, setTitle] = useState("")
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
 
   const handleSubmit = async () => {
-    if(!content.trim() && !imageUrl) return
+    if(!imageUrl) return
 
     setIsPosting(true);
     try {
-      const result = await createPost(content, imageUrl);
+      const result = await createPost(title, content, imageUrl);
       if(result.success) {
         // reset the form
+        setTitle("")
         setContent("")
         setImageUrl("")
         setShowImageUpload(false)
@@ -44,12 +46,18 @@ function CreatePost() {
       <CardContent className="pt-6">
         <div className="space-y-4">
           <div className="flex space-x-4">
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={user?.imageUrl || "https://github.com/shadcn.png"}></AvatarImage>
-            </Avatar>
             <Textarea
-              placeholder="What's on your mind?"
-              className="min-h-[100px] resize-none border-none focus-visible:ring-0 p-0 text-base"
+              placeholder="What is the Title?"
+              className="min-h-[50px] resize-none focus-visible:ring-0 p-0 text-base border-hidden"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={isPosting}
+            />
+          </div>
+          <div className="flex space-x-4">
+            <Textarea
+              placeholder="Description?"
+              className="min-h-[50px] resize-none focus-visible:ring-0 p-0 text-base border-hidden"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               disabled={isPosting}

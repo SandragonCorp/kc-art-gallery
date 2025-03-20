@@ -27,7 +27,7 @@ function ImageUpload({endpoint, onChange, value}) {
         onChange(res?.[0].ufsUrl);
       }}
       onUploadError={(error) => {
-        console.error(error);
+        console.error("bakit error?" + error.message);
       }}
     />
   );
