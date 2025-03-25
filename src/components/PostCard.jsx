@@ -6,12 +6,13 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Card, CardContent } from './ui/card'
 import { Avatar, AvatarImage } from './ui/avatar'
-import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { DeleteAlertDialog } from './DeleteAlertDialog'
 import { Button } from './ui/button'
-import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon } from 'lucide-react'
+import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon, XIcon } from 'lucide-react'
 import { Textarea } from './ui/textarea'
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css';
 
 function PostCard({ post, dbUserId }) {
   const { user } = useUser()
@@ -22,6 +23,7 @@ function PostCard({ post, dbUserId }) {
   const [hasLiked, setHasLiked] = useState(post.likes.some(like => like.userId === dbUserId))
   const [optimisticLikes, setOptimisticLikes] = useState(post._count.likes)
   const [showComments, setShowComments] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLike = async () => {
     if (isLiking) return
@@ -75,28 +77,14 @@ function PostCard({ post, dbUserId }) {
       <CardContent className="p-4 sm:p-6">
         <div className="space-y-4">
           <div className="flex space-x-3 sm:space-x-4">
-            {/* <Link href={`/profile/${post.author.username}`}>
-              <Avatar className="size-8 sm:w-10 sm:h-10">
-                <AvatarImage src={post.author.image ?? "/avatar.png"} />
-              </Avatar>
-            </Link> */}
 
             {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
-                  {/* <Link
-                    href={`/profile/${post.author.username}`}
-                    className="font-semibold truncate"
-                  >
-                    {post.author.name}
-                  </Link> */}
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    {/* <Link href={`/profile/${post.author.username}`}>@{post.author.username}</Link> */}
-                    {/* <span>·</span> */}
                   </div>
                 </div>
-                {/* Check if current user is the post author */}
                 {dbUserId === post.author.id && (
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
                 )}
@@ -121,7 +109,32 @@ function PostCard({ post, dbUserId }) {
           {/* POST IMAGE */}
           {post.image && (
             <div className="rounded-lg overflow-hidden">
-              <img src={post.image} alt="Post content" className="w-full h-auto object-cover" />
+              <img src={post.image} alt="Post content" className="w-full h-auto object-cover cursor-pointer" onClick={() => setIsModalOpen(true)} />
+            </div>
+          )}
+
+          {/* IMAGE VIEWER MODAL */}
+          {isModalOpen && (
+            <div
+              className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <div className="relative max-w-3xl w-full p-4">
+                <button
+                  className="absolute top-0 right-0 p1 bg-red-500 rounded-full shadow-ssm"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  <XIcon className="h-4 w-4 text-white" />
+                </button>
+                <Zoom>
+                <img
+                  src={post.image}
+                  alt="Expanded Post Content"
+                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                  onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image
+                />
+                </Zoom>
+              </div>
             </div>
           )}
 
@@ -180,9 +193,6 @@ function PostCard({ post, dbUserId }) {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <span className="font-medium text-sm">{comment.author.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                          @{comment.author.username}
-                        </span>
                         <span className="text-sm text-muted-foreground">·</span>
                         <span className="text-sm text-muted-foreground">
                           {formatDistanceToNow(new Date(comment.createdAt))} ago

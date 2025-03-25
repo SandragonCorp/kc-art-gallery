@@ -1,20 +1,11 @@
 "use client";
 
-import {
-  BellIcon,
-  HomeIcon,
-  LogOutIcon,
-  MenuIcon,
-  MoonIcon,
-  SunIcon,
-  UserIcon,
-} from "lucide-react";
+import { LogOutIcon, MenuIcon, MoonIcon, SunIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import { useAuth, SignInButton, SignOutButton } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
-import Link from "next/link";
 
 export default function MobileNavbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -45,27 +36,9 @@ export default function MobileNavbar() {
             <SheetTitle>Menu</SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col space-y-4 mt-6">
-            {/* <Button variant="ghost" className="flex items-center gap-3 justify-start" asChild>
-              <Link href="/">
-                <HomeIcon className="w-4 h-4" />
-                Home
-              </Link>
-            </Button> */}
 
             {isSignedIn ? (
               <>
-                {/* <Button variant="ghost" className="flex items-center gap-3 justify-start" asChild>
-                  <Link href="/notifications">
-                    <BellIcon className="w-4 h-4" />
-                    Notifications
-                  </Link>
-                </Button> */}
-                {/* <Button variant="ghost" className="flex items-center gap-3 justify-start" asChild>
-                  <Link href="/profile">
-                    <UserIcon className="w-4 h-4" />
-                    Profile
-                  </Link>
-                </Button> */}
                 <SignOutButton>
                   <Button variant="ghost" className="flex items-center gap-3 justify-start w-full">
                     <LogOutIcon className="w-4 h-4" />
@@ -74,7 +47,7 @@ export default function MobileNavbar() {
                 </SignOutButton>
               </>
             ) : (
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" afterSignInPath="/" afterSignUpPath="/">
                 <Button variant="default" className="w-full">
                   Sign In
                 </Button>

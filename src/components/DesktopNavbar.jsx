@@ -12,13 +12,6 @@ export default async function DesktopNavbar() {
 
   return (
     <div className="hidden md:flex items-center space-x-4">
-      {/* <Button variant="ghost" className="flex items-center gap-2" asChild>
-        <Link href="/">
-          <HomeIcon className="w-4 h-4" />
-          <span className="hidden lg:inline">Home</span>
-        </Link>
-      </Button> */}
-
       {user ? (
         <>
           {dbUserRole === "ADMIN" ? (
@@ -50,7 +43,7 @@ export default async function DesktopNavbar() {
           )}
         </>
       ) : (
-        <SignInButton mode="modal">
+        <SignInButton mode="modal" afterSignInPath="/" afterSignUpPath="/">
           <Button variant="default">Sign In</Button>
         </SignInButton>
       )}
