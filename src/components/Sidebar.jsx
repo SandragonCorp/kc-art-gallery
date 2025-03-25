@@ -5,7 +5,7 @@ async function Sidebar() {
     <div className="sticky top-20">
       <Card>
         <div className="rounded-lg overflow-hidden">
-          <img src="/avatar.jpg" alt="Avatar" className="w-full h-auto object-cover" />
+          <img src="/kc-profile.jpg" alt="Avatar" className="w-full h-auto object-cover" />
         </div>
         <CardHeader>
           <CardTitle className="text-center text-xl font-semibold">Hi, I'm KC</CardTitle>

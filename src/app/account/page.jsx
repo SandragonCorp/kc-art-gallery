@@ -5,7 +5,7 @@ function page() {
   return (
     <div className="flex flex-row items-center justify-center">
       <div className="rounded-lg overflow-hidden">
-        <img src="/avatar.jpg" alt="Avatar" className="w-full h-auto object-cover" />
+        <img src="/kc-profile.jpg" alt="Avatar" className="w-full h-auto object-cover" />
       </div>
       <div className="w-80">
         <SignInButton mode="modal">
