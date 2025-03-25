@@ -94,7 +94,7 @@ function CreatePost() {
             <Button
               className="flex items-center"
               onClick={handleSubmit}
-              disabled={(!content.trim() && !imageUrl) || isPosting}
+              disabled={!imageUrl || isPosting}
             >
               {isPosting ? (
                 <>
